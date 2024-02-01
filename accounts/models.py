@@ -34,10 +34,10 @@ class UserManager(BaseUserManager):
         return user
     
 class User(AbstractBaseUser):     #gives full control over django usermodel
-    RESTRAUNT=1
+    VENDOR=1
     CUSTOMER=2
     ROLE_CHOICE=(
-        (RESTRAUNT,'restraunt'),
+        (VENDOR,'vendor'),
         (CUSTOMER,'customer'),
     )
     first_name=models.CharField(max_length=50)
