@@ -1,4 +1,3 @@
-
 def detectUser(user):
     if user.role==1:
         redirectUrl='vendorDashboard'
@@ -9,3 +8,4 @@ def detectUser(user):
     elif user.role==None and user.is_superadmin:
          redirectUrl='/admin'
          return redirectUrl
+    

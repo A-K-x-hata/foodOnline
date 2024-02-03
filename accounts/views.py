@@ -1,13 +1,17 @@
+import email
 from multiprocessing import AuthenticationError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
 from accounts.models import User, UserProfile
 from accounts.utils import detectUser
 from vendor.forms import VendorForm
+from vendor.models import Vendor
 from .forms import UserForm
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+
 #Restrict the vendor from accessing the customer Page
 
 def check_role_vendor(user):
@@ -19,7 +23,7 @@ def check_role_vendor(user):
 
 
 #Restrict the customer from accessing the vandor page
-
+    
 def check_role_customer(user):
     if user.role==2:
         return True
@@ -39,6 +43,8 @@ def registerUser(request):
             user.set_password(password)
             user.role = User.CUSTOMER
             user.save()
+ 
+            
             messages.success(request,"Your account has been registered successfully!")
             return redirect('registerUser')
         else:
@@ -91,6 +97,7 @@ def registerVendor(request):
         }
         return render(request, 'accounts/registerVendor.html', context)
 
+
 def login(request):
     if request.user.is_authenticated:
         messages.warning(request,"you are already logged in!")
@@ -127,5 +134,6 @@ def custDashboard(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
 def vendorDashboard(request):
+    vendor=Vendor.objects.get(user=request.user)
     return render(request,'accounts/vendorDashboard.html')
 
